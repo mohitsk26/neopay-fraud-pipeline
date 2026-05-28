@@ -1,6 +1,5 @@
 streamlit==1.32.0
 pandas==2.2.1
 plotly==5.20.0
-confluent-kafka==2.3.0
+kafka-python==2.0.2
 python-dotenv==1.0.1
-
