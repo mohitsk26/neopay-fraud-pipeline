@@ -51,24 +51,27 @@ def load_forecast() -> pd.DataFrame:
 
 def send_to_kafka(transaction: dict) -> bool:
     try:
-        from confluent_kafka import Producer
-        producer = Producer({
-            "bootstrap.servers": st.secrets["KAFKA_BOOTSTRAP_SERVERS"],
-            "security.protocol": "SASL_SSL",
-            "sasl.mechanism":    "PLAIN",
-            "sasl.username":     "$ConnectionString",
-            "sasl.password":     st.secrets["EVENTHUBS_CONNECTION_STRING"],
-        })
+        from kafka import KafkaProducer
         import json as _json
-        producer.produce(
-            topic="transactions",
-            key=transaction["account_id"].encode(),
-            value=_json.dumps(transaction).encode()
+        producer = KafkaProducer(
+            bootstrap_servers=st.secrets["KAFKA_BOOTSTRAP_SERVERS"],
+            security_protocol="SASL_SSL",
+            sasl_mechanism="PLAIN",
+            sasl_plain_username="$ConnectionString",
+            sasl_plain_password=st.secrets["EVENTHUBS_CONNECTION_STRING"],
+            value_serializer=lambda v: _json.dumps(v).encode("utf-8"),
+            key_serializer=lambda k: k.encode("utf-8")
+        )
+        producer.send(
+            "transactions",
+            key=transaction["account_id"],
+            value=transaction
         )
         producer.flush()
         return True
     except Exception:
-        return False  # silently fail — demo mode continues
+        return False  # demo mode continues without Kafka
+
 
 # ── Header ────────────────────────────────────────────────
 st.title("🛡️ NeoPay — Real-Time Fraud Intelligence")
