@@ -38,7 +38,6 @@
 - [Prophet Forecasting](#-prophet-forecasting)
 - [Streamlit UI](#-streamlit-ui)
 - [Security & DevSecOps](#-security--devsecops)
-- [Resume Bullet Points](#-resume-bullet-points)
 
 ---
 
@@ -280,7 +279,7 @@ cp .env.example .env
 
 ---
 
-## 📈 Resume Bullet Points
+## 📈Bullet Points
 
 > Architected production-grade real-time fraud detection pipeline
 > ingesting transactions via Apache Kafka (Azure Event Hubs),
